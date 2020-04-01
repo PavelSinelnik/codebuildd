@@ -1,37 +1,29 @@
 version: 0.2
-
-#env:
-  #variables:
-     # key: "value"
-     # key: "value"
-  #parameter-store:
-     # key: "value"
-     # key: "value"
-
+env:
+  variables:
+    BUCKET_NAME: "qqqwwwerrtyy123321"
 phases:
-  #install:
-    #commands:
-      # -command
-      # - command
-  #pre_build:
-    #commands:
-      # - command
-      # - command
+  install:
+    commands:
+      - apt-get update
+      - apt-get install zip
+  pre_build:
+    commands:
+      - pip install virtualenv
+      - virtualenv env
+      - . env/bin/activate
+      - pip install -r requirements.txt
   build:
     commands:
-      - echo Hello from CodeBuild
-      # - command
-      # - command
-  #post_build:
-    #commands:
-      # - command
-      # - command
-#artifacts:
-  #files:
-    # - location
-    # - location
-  #discard-paths: yes
-  #base-directory: location
-#cache:
-  #paths:
-    # - paths
+      - ISO_DATE=$(date +%Y-%m-%dT%H:%M:%S%z)
+      - TMP_DIR="dist-$ISO_DATE"
+      - mkdir $TMP_DIR
+      - cp *.py $TMP_DIR
+      - cp -rf venv/lib/python3.6/site-packages/* $TMP_DIR
+      - cd $TMP_DIR
+      - PYTHON_FILE_NAME=$(ls grep | *.py)
+      - LAMBDA_NAME="${PYTHON_FILE_NAME%.*}"
+      - cd $TMP_DIR; zip -r ../dist.zip *
+      - cd ..
+      - aws s3 cp dist.zip s3://$BUCKET_NAME/$LAMBDA_NAME/dist.zip
+      - aws lambda update-function-code --function-name $LAMBDA_NAME --s3-bucket $BUCKET_NAME --s3-key $LAMBDA_NAME/dist.zip --publish
