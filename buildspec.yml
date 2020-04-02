@@ -20,6 +20,7 @@ phases:
       - mkdir $TMP_DIR
       - cd $TMP_DIR
       - WAY_TO_DIR=$(pwd)
+      - echo $WAY_TO_DIR
       - cd ..
       - cp *.py $WAY_TO_DIR
       - cp -rf env/lib/python3.6/site-packages/* $WAY_TO_DIR
