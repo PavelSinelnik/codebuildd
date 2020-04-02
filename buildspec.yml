@@ -26,6 +26,9 @@ phases:
       - cp *.py $WAY_TO_DIR
       - cp -rf env/lib/python3.6/site-packages/* $WAY_TO_DIR
       - cd $WAY_TO_DIR
+      - ls
+      - ls | grep *.py
+
       - PYTHON_FILE_NAME=$(ls | grep *.py)
       - LAMBDA_NAME="${PYTHON_FILE_NAME%.*}"
       - cd $WAY_TO_DIR; zip -r ../dist.zip *

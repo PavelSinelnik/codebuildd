@@ -16,4 +16,4 @@ def lambda_handler(event, context):
     )
 
 
-    return ('test trigge!!dsadsdfsdfsdfsdfr')
+    return ('test trigge!')
